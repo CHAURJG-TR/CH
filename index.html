@@ -13,7 +13,7 @@
       width: 100%;
       height: 100%;
       font-family: 'Microsoft JhengHei', 'PingFang TC', Arial, sans-serif;
-      overflow: hidden;
+      overflow: auto;
     }
 
     html {
@@ -23,7 +23,7 @@
 
     .app-wrapper {
       width: 100%;
-      height: 100%;
+      min-height: 100%;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       display: flex;
       align-items: center;
@@ -36,7 +36,7 @@
       border-radius: 24px;
       padding: 48px;
       width: 100%;
-      max-width: 600px;
+      max-width: 700px;
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     }
 
@@ -52,11 +52,64 @@
       font-size: 16px;
       color: #718096;
       text-align: center;
-      margin-bottom: 40px;
+      margin-bottom: 32px;
+    }
+
+    .settings-section {
+      background: #f7fafc;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .settings-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .settings-row {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .setting-item {
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .setting-label {
+      display: block;
+      font-size: 14px;
+      color: #4a5568;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .setting-input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: all 0.2s ease;
+      box-sizing: border-box;
+    }
+
+    .setting-input:focus {
+      outline: none;
+      border-color: #667eea;
     }
 
     .phrase-list {
-      margin-bottom: 32px;
+      margin-bottom: 24px;
     }
 
     .phrase-item {
@@ -87,10 +140,54 @@
       font-size: 24px;
     }
 
+    .phrase-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
     .phrase-text {
       font-size: 18px;
       font-weight: 500;
-      flex: 1;
+    }
+
+    .phrase-mode {
+      font-size: 12px;
+      opacity: 0.8;
+    }
+
+    .phrase-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .record-btn {
+      background: #ef4444;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .record-btn:hover {
+      background: #dc2626;
+    }
+
+    .record-btn.recording {
+      background: #10b981;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
     }
 
     .control-panel {
@@ -135,6 +232,12 @@
       background: #f56565;
     }
 
+    .control-btn:disabled {
+      background: #cbd5e0;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
     .status {
       text-align: center;
       font-size: 14px;
@@ -149,14 +252,20 @@
       color: #2f855a;
     }
 
-    .loop-indicator {
+    .status.recording {
+      background: #fed7d7;
+      color: #c53030;
+    }
+
+    .progress-info {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      margin-top: 16px;
+      gap: 12px;
+      margin-top: 12px;
       font-size: 14px;
       color: #667eea;
+      font-weight: 600;
     }
   </style>
   <style>@view-transition { navigation: auto; }</style>
@@ -167,13 +276,36 @@
   <div class="app-wrapper">
    <div class="player-container">
     <h1 class="title" id="player-title">課堂提醒播放器</h1>
-    <p class="subtitle">選擇要播放的提醒語句</p>
+    <p class="subtitle">選擇提醒語句，可使用錄音或文字轉語音</p>
+    <div class="settings-section">
+     <div class="settings-title">
+      ⚙️ 播放設定
+     </div>
+     <div class="settings-row">
+      <div class="setting-item"><label class="setting-label" for="interval-input">間隔秒數</label> <input type="number" id="interval-input" class="setting-input" min="1" max="60" value="3">
+      </div>
+      <div class="setting-item"><label class="setting-label" for="repeat-input">重複次數（0=無限）</label> <input type="number" id="repeat-input" class="setting-input" min="0" max="999" value="0">
+      </div>
+     </div>
+    </div>
     <div class="phrase-list" id="phrase-list">
-     <div class="phrase-item" data-phrase="0"><span class="phrase-icon">📢</span> <span class="phrase-text" id="phrase-text-0">靜下來</span>
+     <div class="phrase-item" data-phrase="0"><span class="phrase-icon">📢</span>
+      <div class="phrase-content"><span class="phrase-text" id="phrase-text-0">靜下來</span> <span class="phrase-mode" id="phrase-mode-0">文字轉語音</span>
+      </div>
+      <div class="phrase-actions"><button class="record-btn" data-phrase="0"> <span>🎤</span> <span>錄音</span> </button>
+      </div>
      </div>
-     <div class="phrase-item" data-phrase="1"><span class="phrase-icon">🪑</span> <span class="phrase-text" id="phrase-text-1">回座位</span>
+     <div class="phrase-item" data-phrase="1"><span class="phrase-icon">🪑</span>
+      <div class="phrase-content"><span class="phrase-text" id="phrase-text-1">回座位</span> <span class="phrase-mode" id="phrase-mode-1">文字轉語音</span>
+      </div>
+      <div class="phrase-actions"><button class="record-btn" data-phrase="1"> <span>🎤</span> <span>錄音</span> </button>
+      </div>
      </div>
-     <div class="phrase-item" data-phrase="2"><span class="phrase-icon">📝</span> <span class="phrase-text" id="phrase-text-2">專心上課</span>
+     <div class="phrase-item" data-phrase="2"><span class="phrase-icon">📝</span>
+      <div class="phrase-content"><span class="phrase-text" id="phrase-text-2">專心上課</span> <span class="phrase-mode" id="phrase-mode-2">文字轉語音</span>
+      </div>
+      <div class="phrase-actions"><button class="record-btn" data-phrase="2"> <span>🎤</span> <span>錄音</span> </button>
+      </div>
      </div>
     </div>
     <div class="control-panel"><button class="control-btn" id="play-btn" aria-label="播放">▶️</button> <button class="control-btn stop" id="stop-btn" aria-label="停止">⏹️</button>
@@ -181,7 +313,7 @@
     <div class="status" id="status">
      請選擇一個提醒語句後按播放
     </div>
-    <div class="loop-indicator" id="loop-indicator" style="display: none;"><span>🔁</span> <span>無限循環播放中</span>
+    <div class="progress-info" id="progress-info" style="display: none;"><span id="play-count">0</span> <span>/</span> <span id="total-count">∞</span>
     </div>
    </div>
   </div>
@@ -200,7 +332,13 @@
 
     let selectedPhrase = null;
     let isPlaying = false;
+    let isRecording = false;
     let speechInterval = null;
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let recordedAudios = [null, null, null];
+    let currentPlayCount = 0;
+    let targetPlayCount = 0;
 
     async function onConfigChange(config) {
       const playerTitle = document.getElementById('player-title');
@@ -248,7 +386,12 @@
         el.style.fontSize = `${fontSize * 1.125}px`;
       });
       document.querySelector('.status').style.fontSize = `${fontSize * 0.875}px`;
-      document.querySelector('.loop-indicator').style.fontSize = `${fontSize * 0.875}px`;
+      document.querySelectorAll('.settings-title').forEach(el => {
+        el.style.fontSize = `${fontSize * 1.125}px`;
+      });
+      document.querySelectorAll('.setting-label').forEach(el => {
+        el.style.fontSize = `${fontSize * 0.875}px`;
+      });
     }
 
     function mapToCapabilities(config) {
@@ -341,23 +484,61 @@
       }
     }
 
+    function playAudio(audioBlob) {
+      const audio = new Audio(URL.createObjectURL(audioBlob));
+      audio.play();
+    }
+
+    function playSelectedPhrase() {
+      if (recordedAudios[selectedPhrase]) {
+        playAudio(recordedAudios[selectedPhrase]);
+      } else {
+        const phraseText = document.getElementById(`phrase-text-${selectedPhrase}`).textContent;
+        speakText(phraseText);
+      }
+    }
+
     function startPlaying() {
       if (selectedPhrase === null) {
         updateStatus('請先選擇要播放的提醒語句');
         return;
       }
 
+      const intervalSeconds = parseInt(document.getElementById('interval-input').value) || 3;
+      const repeatCount = parseInt(document.getElementById('repeat-input').value) || 0;
+
       isPlaying = true;
+      currentPlayCount = 0;
+      targetPlayCount = repeatCount;
+
       const phraseText = document.getElementById(`phrase-text-${selectedPhrase}`).textContent;
+      const mode = recordedAudios[selectedPhrase] ? '人聲錄音' : '文字轉語音';
       
-      updateStatus(`正在播放：${phraseText}`);
-      document.getElementById('loop-indicator').style.display = 'flex';
+      updateStatus(`正在播放：${phraseText}（${mode}）`);
+      updateProgress();
+      document.getElementById('progress-info').style.display = 'flex';
       
-      speakText(phraseText);
-      
-      speechInterval = setInterval(() => {
-        speakText(phraseText);
-      }, 3000);
+      playSelectedPhrase();
+      currentPlayCount++;
+      updateProgress();
+
+      if (targetPlayCount === 0 || currentPlayCount < targetPlayCount) {
+        speechInterval = setInterval(() => {
+          playSelectedPhrase();
+          currentPlayCount++;
+          updateProgress();
+
+          if (targetPlayCount > 0 && currentPlayCount >= targetPlayCount) {
+            stopPlaying();
+            updateStatus('播放完成！');
+          }
+        }, intervalSeconds * 1000);
+      } else {
+        setTimeout(() => {
+          stopPlaying();
+          updateStatus('播放完成！');
+        }, 1000);
+      }
     }
 
     function stopPlaying() {
@@ -372,22 +553,82 @@
         speechSynthesis.cancel();
       }
       
-      updateStatus('播放已停止');
-      document.getElementById('loop-indicator').style.display = 'none';
+      if (!isRecording) {
+        updateStatus('播放已停止');
+      }
+      document.getElementById('progress-info').style.display = 'none';
+    }
+
+    function updateProgress() {
+      document.getElementById('play-count').textContent = currentPlayCount;
+      document.getElementById('total-count').textContent = targetPlayCount === 0 ? '∞' : targetPlayCount;
     }
 
     function updateStatus(message) {
       const statusEl = document.getElementById('status');
       statusEl.textContent = message;
       
+      statusEl.classList.remove('playing', 'recording');
       if (isPlaying) {
         statusEl.classList.add('playing');
-      } else {
-        statusEl.classList.remove('playing');
+      } else if (isRecording) {
+        statusEl.classList.add('recording');
+      }
+    }
+
+    async function startRecording(phraseIndex) {
+      if (isRecording) return;
+
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream);
+        audioChunks = [];
+
+        mediaRecorder.ondataavailable = (event) => {
+          audioChunks.push(event.data);
+        };
+
+        mediaRecorder.onstop = () => {
+          const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+          recordedAudios[phraseIndex] = audioBlob;
+          
+          const modeEl = document.getElementById(`phrase-mode-${phraseIndex}`);
+          modeEl.textContent = '人聲錄音 ✓';
+          
+          stream.getTracks().forEach(track => track.stop());
+          isRecording = false;
+          updateStatus('錄音完成！');
+        };
+
+        mediaRecorder.start();
+        isRecording = true;
+        updateStatus('錄音中... 請再按一次停止');
+
+        const recordBtn = document.querySelector(`.record-btn[data-phrase="${phraseIndex}"]`);
+        recordBtn.classList.add('recording');
+        recordBtn.innerHTML = '<span>⏹️</span><span>停止</span>';
+
+      } catch (error) {
+        updateStatus('無法使用麥克風，請檢查權限設定');
+      }
+    }
+
+    function stopRecording() {
+      if (mediaRecorder && isRecording) {
+        mediaRecorder.stop();
+        
+        document.querySelectorAll('.record-btn').forEach(btn => {
+          btn.classList.remove('recording');
+          btn.innerHTML = '<span>🎤</span><span>錄音</span>';
+        });
       }
     }
 
     document.getElementById('phrase-list').addEventListener('click', (e) => {
+      if (e.target.closest('.record-btn')) {
+        return;
+      }
+
       const phraseItem = e.target.closest('.phrase-item');
       if (!phraseItem) return;
 
@@ -398,20 +639,38 @@
       phraseItem.classList.add('active');
       selectedPhrase = parseInt(phraseItem.dataset.phrase);
       
-      if (!isPlaying) {
+      if (!isPlaying && !isRecording) {
         const phraseText = document.getElementById(`phrase-text-${selectedPhrase}`).textContent;
-        updateStatus(`已選擇：${phraseText}`);
+        const mode = recordedAudios[selectedPhrase] ? '人聲錄音' : '文字轉語音';
+        updateStatus(`已選擇：${phraseText}（${mode}）`);
       }
     });
 
+    document.querySelectorAll('.record-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const phraseIndex = parseInt(btn.dataset.phrase);
+        
+        if (isRecording) {
+          stopRecording();
+        } else {
+          startRecording(phraseIndex);
+        }
+      });
+    });
+
     document.getElementById('play-btn').addEventListener('click', () => {
-      if (!isPlaying) {
+      if (!isPlaying && !isRecording) {
         startPlaying();
       }
     });
 
     document.getElementById('stop-btn').addEventListener('click', () => {
-      stopPlaying();
+      if (isRecording) {
+        stopRecording();
+      } else {
+        stopPlaying();
+      }
     });
 
     if (window.elementSdk) {
@@ -425,5 +684,5 @@
 
     onConfigChange(defaultConfig);
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a4ee01306466b86',t:'MTc2NDIxNzY2OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a4f1b055030a3ac',t:'MTc2NDIyMDA4NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
