@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="zh-TW">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Classroom Audio Player</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      font-family: 'Microsoft JhengHei', 'PingFang TC', Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    html {
+      height: 100%;
+      width: 100%;
+    }
+
+    .app-wrapper {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .player-container {
+      background: white;
+      border-radius: 24px;
+      padding: 48px;
+      width: 100%;
+      max-width: 600px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .title {
+      font-size: 32px;
+      font-weight: bold;
+      color: #2d3748;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      color: #718096;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .phrase-list {
+      margin-bottom: 32px;
+    }
+
+    .phrase-item {
+      background: #f7fafc;
+      border: 2px solid transparent;
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .phrase-item:hover {
+      background: #edf2f7;
+      border-color: #667eea;
+    }
+
+    .phrase-item.active {
+      background: #667eea;
+      border-color: #667eea;
+      color: white;
+    }
+
+    .phrase-icon {
+      font-size: 24px;
+    }
+
+    .phrase-text {
+      font-size: 18px;
+      font-weight: 500;
+      flex: 1;
+    }
+
+    .control-panel {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .control-btn {
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 64px;
+      height: 64px;
+      font-size: 28px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    .control-btn:hover {
+      background: #5568d3;
+      transform: scale(1.05);
+    }
+
+    .control-btn:active {
+      transform: scale(0.95);
+    }
+
+    .control-btn.stop {
+      background: #fc8181;
+      box-shadow: 0 4px 12px rgba(252, 129, 129, 0.4);
+    }
+
+    .control-btn.stop:hover {
+      background: #f56565;
+    }
+
+    .status {
+      text-align: center;
+      font-size: 14px;
+      color: #718096;
+      padding: 16px;
+      background: #f7fafc;
+      border-radius: 12px;
+    }
+
+    .status.playing {
+      background: #c6f6d5;
+      color: #2f855a;
+    }
+
+    .loop-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 16px;
+      font-size: 14px;
+      color: #667eea;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="app-wrapper">
+   <div class="player-container">
+    <h1 class="title" id="player-title">課堂提醒播放器</h1>
+    <p class="subtitle">選擇要播放的提醒語句</p>
+    <div class="phrase-list" id="phrase-list">
+     <div class="phrase-item" data-phrase="0"><span class="phrase-icon">📢</span> <span class="phrase-text" id="phrase-text-0">靜下來</span>
+     </div>
+     <div class="phrase-item" data-phrase="1"><span class="phrase-icon">🪑</span> <span class="phrase-text" id="phrase-text-1">回座位</span>
+     </div>
+     <div class="phrase-item" data-phrase="2"><span class="phrase-icon">📝</span> <span class="phrase-text" id="phrase-text-2">專心上課</span>
+     </div>
+    </div>
+    <div class="control-panel"><button class="control-btn" id="play-btn" aria-label="播放">▶️</button> <button class="control-btn stop" id="stop-btn" aria-label="停止">⏹️</button>
+    </div>
+    <div class="status" id="status">
+     請選擇一個提醒語句後按播放
+    </div>
+    <div class="loop-indicator" id="loop-indicator" style="display: none;"><span>🔁</span> <span>無限循環播放中</span>
+    </div>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      player_title: "課堂提醒播放器",
+      phrase_1: "靜下來",
+      phrase_2: "回座位",
+      phrase_3: "專心上課",
+      background_color: "#667eea",
+      surface_color: "#ffffff",
+      text_color: "#2d3748",
+      primary_action_color: "#667eea",
+      secondary_action_color: "#fc8181"
+    };
+
+    let selectedPhrase = null;
+    let isPlaying = false;
+    let speechInterval = null;
+
+    async function onConfigChange(config) {
+      const playerTitle = document.getElementById('player-title');
+      const phraseText0 = document.getElementById('phrase-text-0');
+      const phraseText1 = document.getElementById('phrase-text-1');
+      const phraseText2 = document.getElementById('phrase-text-2');
+      const appWrapper = document.querySelector('.app-wrapper');
+      const playerContainer = document.querySelector('.player-container');
+      const title = document.querySelector('.title');
+      const controlBtns = document.querySelectorAll('.control-btn:not(.stop)');
+      const stopBtn = document.querySelector('.control-btn.stop');
+
+      playerTitle.textContent = config.player_title || defaultConfig.player_title;
+      phraseText0.textContent = config.phrase_1 || defaultConfig.phrase_1;
+      phraseText1.textContent = config.phrase_2 || defaultConfig.phrase_2;
+      phraseText2.textContent = config.phrase_3 || defaultConfig.phrase_3;
+
+      const backgroundColor = config.background_color || defaultConfig.background_color;
+      const surfaceColor = config.surface_color || defaultConfig.surface_color;
+      const textColor = config.text_color || defaultConfig.text_color;
+      const primaryActionColor = config.primary_action_color || defaultConfig.primary_action_color;
+      const secondaryActionColor = config.secondary_action_color || defaultConfig.secondary_action_color;
+
+      appWrapper.style.background = `linear-gradient(135deg, ${backgroundColor} 0%, ${backgroundColor}dd 100%)`;
+      playerContainer.style.background = surfaceColor;
+      title.style.color = textColor;
+
+      controlBtns.forEach(btn => {
+        btn.style.background = primaryActionColor;
+        btn.style.boxShadow = `0 4px 12px ${primaryActionColor}66`;
+      });
+
+      stopBtn.style.background = secondaryActionColor;
+      stopBtn.style.boxShadow = `0 4px 12px ${secondaryActionColor}66`;
+
+      const customFont = config.font_family || defaultConfig.font_family;
+      if (customFont) {
+        document.body.style.fontFamily = `${customFont}, 'Microsoft JhengHei', 'PingFang TC', Arial, sans-serif`;
+      }
+
+      const fontSize = config.font_size || 16;
+      title.style.fontSize = `${fontSize * 2}px`;
+      document.querySelector('.subtitle').style.fontSize = `${fontSize}px`;
+      document.querySelectorAll('.phrase-text').forEach(el => {
+        el.style.fontSize = `${fontSize * 1.125}px`;
+      });
+      document.querySelector('.status').style.fontSize = `${fontSize * 0.875}px`;
+      document.querySelector('.loop-indicator').style.fontSize = `${fontSize * 0.875}px`;
+    }
+
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [
+          {
+            get: () => config.background_color || defaultConfig.background_color,
+            set: (value) => {
+              config.background_color = value;
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            }
+          },
+          {
+            get: () => config.surface_color || defaultConfig.surface_color,
+            set: (value) => {
+              config.surface_color = value;
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ surface_color: value });
+              }
+            }
+          },
+          {
+            get: () => config.text_color || defaultConfig.text_color,
+            set: (value) => {
+              config.text_color = value;
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            }
+          },
+          {
+            get: () => config.primary_action_color || defaultConfig.primary_action_color,
+            set: (value) => {
+              config.primary_action_color = value;
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ primary_action_color: value });
+              }
+            }
+          },
+          {
+            get: () => config.secondary_action_color || defaultConfig.secondary_action_color,
+            set: (value) => {
+              config.secondary_action_color = value;
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ secondary_action_color: value });
+              }
+            }
+          }
+        ],
+        borderables: [],
+        fontEditable: {
+          get: () => config.font_family || defaultConfig.font_family,
+          set: (value) => {
+            config.font_family = value;
+            if (window.elementSdk) {
+              window.elementSdk.setConfig({ font_family: value });
+            }
+          }
+        },
+        fontSizeable: {
+          get: () => config.font_size || 16,
+          set: (value) => {
+            config.font_size = value;
+            if (window.elementSdk) {
+              window.elementSdk.setConfig({ font_size: value });
+            }
+          }
+        }
+      };
+    }
+
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ["player_title", config.player_title || defaultConfig.player_title],
+        ["phrase_1", config.phrase_1 || defaultConfig.phrase_1],
+        ["phrase_2", config.phrase_2 || defaultConfig.phrase_2],
+        ["phrase_3", config.phrase_3 || defaultConfig.phrase_3]
+      ]);
+    }
+
+    function speakText(text) {
+      if ('speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'zh-TW';
+        utterance.rate = 0.9;
+        utterance.pitch = 1;
+        speechSynthesis.speak(utterance);
+      }
+    }
+
+    function startPlaying() {
+      if (selectedPhrase === null) {
+        updateStatus('請先選擇要播放的提醒語句');
+        return;
+      }
+
+      isPlaying = true;
+      const phraseText = document.getElementById(`phrase-text-${selectedPhrase}`).textContent;
+      
+      updateStatus(`正在播放：${phraseText}`);
+      document.getElementById('loop-indicator').style.display = 'flex';
+      
+      speakText(phraseText);
+      
+      speechInterval = setInterval(() => {
+        speakText(phraseText);
+      }, 3000);
+    }
+
+    function stopPlaying() {
+      isPlaying = false;
+      
+      if (speechInterval) {
+        clearInterval(speechInterval);
+        speechInterval = null;
+      }
+      
+      if ('speechSynthesis' in window) {
+        speechSynthesis.cancel();
+      }
+      
+      updateStatus('播放已停止');
+      document.getElementById('loop-indicator').style.display = 'none';
+    }
+
+    function updateStatus(message) {
+      const statusEl = document.getElementById('status');
+      statusEl.textContent = message;
+      
+      if (isPlaying) {
+        statusEl.classList.add('playing');
+      } else {
+        statusEl.classList.remove('playing');
+      }
+    }
+
+    document.getElementById('phrase-list').addEventListener('click', (e) => {
+      const phraseItem = e.target.closest('.phrase-item');
+      if (!phraseItem) return;
+
+      document.querySelectorAll('.phrase-item').forEach(item => {
+        item.classList.remove('active');
+      });
+      
+      phraseItem.classList.add('active');
+      selectedPhrase = parseInt(phraseItem.dataset.phrase);
+      
+      if (!isPlaying) {
+        const phraseText = document.getElementById(`phrase-text-${selectedPhrase}`).textContent;
+        updateStatus(`已選擇：${phraseText}`);
+      }
+    });
+
+    document.getElementById('play-btn').addEventListener('click', () => {
+      if (!isPlaying) {
+        startPlaying();
+      }
+    });
+
+    document.getElementById('stop-btn').addEventListener('click', () => {
+      stopPlaying();
+    });
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
+
+    onConfigChange(defaultConfig);
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a4ee01306466b86',t:'MTc2NDIxNzY2OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
