@@ -676,7 +676,7 @@
    <div class="player-container">
     <h1 class="title" id="player-title">課���提醒播放器</h1>
     <p class="subtitle">可手動播放或設定課表自動播放</p>
-    <div class="tabs"><button class="tab-btn active" data-tab="manual">手動播放</button> <button class="tab-btn" data-tab="schedule">課表設定</button> <button class="tab-btn" data-tab="timer">計時系統</button>
+    <div class="tabs"><button class="tab-btn active" data-tab="manual">手動播放</button> <button class="tab-btn" data-tab="schedule">課表設定</button> <button class="tab-btn" data-tab="timer">計時系統</button> <button class="tab-btn" data-tab="decibel">分貝計</button>
     </div><!-- Manual Tab -->
     <div class="tab-content active" id="manual-tab">
      <div class="settings-section">
@@ -686,7 +686,7 @@
       <div class="settings-row">
        <div class="setting-item"><label class="setting-label" for="interval-input">間隔秒數</label> <input type="number" id="interval-input" class="setting-input" min="1" max="60" value="3">
        </div>
-       <div class="setting-item"><label class="setting-label" for="repeat-input">重複次數（0=無限）</label> <input type="number" id="repeat-input" class="setting-input" min="0" max="999" value="0">
+       <div class="setting-item"><label class="setting-label" for="repeat-input">重複���數（0=無限）</label> <input type="number" id="repeat-input" class="setting-input" min="0" max="999" value="0">
        </div>
       </div>
       <div class="settings-row">
@@ -698,7 +698,7 @@
      </div>
      <div class="phrase-list" id="phrase-list">
       <div class="phrase-item" data-phrase="0"><span class="phrase-icon">📢</span>
-       <div class="phrase-content"><span class="phrase-text" id="phrase-text-0">靜下來</span> <span class="phrase-mode" id="phrase-mode-0">文字轉語音</span>
+       <div class="phrase-content"><span class="phrase-text" id="phrase-text-0">靜��來</span> <span class="phrase-mode" id="phrase-mode-0">文字轉語音</span>
        </div>
        <div class="phrase-actions"><button class="record-btn" data-phrase="0"> <span>🎤</span> <span>錄音</span> </button>
        </div>
@@ -718,7 +718,7 @@
       <div class="phrase-item" data-phrase="3"><span class="phrase-icon">🤫</span>
        <div class="phrase-content"><span class="phrase-text" id="phrase-text-3">不要吵</span> <span class="phrase-mode" id="phrase-mode-3">文字轉語音</span>
        </div>
-       <div class="phrase-actions"><button class="record-btn" data-phrase="3"> <span>🎤</span> <span>錄音</span> </button>
+       <div class="phrase-actions"><button class="record-btn" data-phrase="3"> <span>🎤</span> <span>錄���</span> </button>
        </div>
       </div>
       <div class="phrase-item" data-phrase="4"><span class="phrase-icon">🚶</span>
@@ -737,7 +737,7 @@
      <div class="control-panel"><button class="control-btn" id="play-btn" aria-label="播放">▶️</button> <button class="control-btn stop" id="stop-btn" aria-label="停止">���️</button>
      </div>
      <div class="status" id="status">
-      請選擇一個提醒語句後按播放
+      請選���一個提醒語句後按播放
      </div>
      <div class="progress-info" id="progress-info" style="display: none;"><span id="play-count">0</span> <span>/</span> <span id="total-count">∞</span>
      </div>
@@ -777,6 +777,53 @@
       <div class="timer-phrase-select-wrapper"><label class="setting-label" for="timer-alert-phrase">提醒語句</label> <select id="timer-alert-phrase" class="setting-select"> <option value="0">📢 靜下來</option> <option value="1">🪑 回座位</option> <option value="2">📝 專心上課</option> <option value="3">🤫 不要吵</option> <option value="4">🚶 出去排隊</option> <option value="5">🍱 抬餐</option> </select>
       </div>
      </div>
+    </div><!-- Decibel Tab -->
+    <div class="tab-content" id="decibel-tab">
+     <div class="timer-display-section">
+      <div class="timer-display" id="decibel-display" style="font-size: 80px;">
+       -- dB
+      </div>
+      <div class="timer-controls"><button class="timer-btn start" id="decibel-start-btn"> <span class="timer-btn-icon">🎤</span> <span class="timer-btn-text">開始監測</span> </button> <button class="timer-btn stop" id="decibel-stop-btn"> <span class="timer-btn-icon">⏹️</span> <span class="timer-btn-text">停止</span> </button>
+      </div>
+     </div>
+     <div class="timer-settings-section">
+      <div class="settings-title">
+       ⚙️ 自動提醒設定
+      </div>
+      <div class="timer-alert-option"><input type="checkbox" id="decibel-alert-enabled" class="timer-checkbox" checked> <label for="decibel-alert-enabled" class="timer-checkbox-label">音量超標時自動播放提醒</label>
+      </div>
+      <div class="settings-row">
+       <div class="setting-item"><label class="setting-label" for="decibel-threshold">分貝閾值</label> <input type="number" id="decibel-threshold" class="setting-input" min="50" max="100" value="80">
+       </div>
+       <div class="setting-item"><label class="setting-label" for="decibel-cooldown">冷卻時間（秒）</label> <input type="number" id="decibel-cooldown" class="setting-input" min="5" max="300" value="10">
+       </div>
+      </div>
+      <div class="timer-phrase-select-wrapper"><label class="setting-label" for="decibel-alert-phrase">提醒語句</label> <select id="decibel-alert-phrase" class="setting-select"> <option value="0">📢 靜下來</option> <option value="1">🪑 回座位</option> <option value="2">📝 專心上課</option> <option value="3" selected>🤫 不要吵</option> <option value="4">🚶 出去排隊</option> <option value="5">🍱 抬餐</option> </select>
+      </div>
+     </div>
+     <div class="timer-custom-section">
+      <div class="settings-title">
+       📊 分貝說明
+      </div>
+      <div style="padding: 16px; background: white; border-radius: 8px;">
+       <div style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;"><span style="font-size: 20px;">🟢</span> <span style="font-weight: 500;">30-50 dB：安靜環境（圖書館）</span>
+       </div>
+       <div style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;"><span style="font-size: 20px;">🟡</span> <span style="font-weight: 500;">50-70 dB：正常交談</span>
+       </div>
+       <div style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;"><span style="font-size: 20px;">🟠</span> <span style="font-weight: 500;">70-85 dB：吵雜環境</span>
+       </div>
+       <div style="display: flex; align-items: center; gap: 8px;"><span style="font-size: 20px;">🔴</span> <span style="font-weight: 500;">85+ dB：非常吵鬧</span>
+       </div>
+      </div>
+     </div>
+     <div class="auto-status" id="decibel-status" style="display: none;">
+      <div class="auto-status-title">
+       🔔 最近提醒
+      </div>
+      <div class="auto-status-time" id="decibel-last-alert">
+       尚未觸發
+      </div>
+     </div>
     </div><!-- Schedule Tab -->
     <div class="tab-content" id="schedule-tab">
      <div class="auto-status">
@@ -792,9 +839,9 @@
        ➕ 新增課表排程
       </div>
       <div class="form-row">
-       <div class="form-group"><label class="setting-label" for="schedule-day">星期</label> <select id="schedule-day" class="setting-select"> <option value="星期一">星期一</option> <option value="星期二">星期二</option> <option value="星期三">星期三</option> <option value="星期四">星���四</option> <option value="星期五">星期五</option> <option value="星期六">星期六</option> <option value="星期日">星期日</option> </select>
+       <div class="form-group"><label class="setting-label" for="schedule-day">星期</label> <select id="schedule-day" class="setting-select"> <option value="星期一">星期一</option> <option value="星期二">星期二</option> <option value="星期三">星期三</option> <option value="星期四">星�����</option> <option value="星期五">星期五</option> <option value="星期六">星期六</option> <option value="星期���">星期日</option> </select>
        </div>
-       <div class="form-group"><label class="setting-label" for="schedule-period">第幾節</label> <select id="schedule-period" class="setting-select"> <option value="第1節">第1節</option> <option value="第2節">第2節</option> <option value="第3節">第3節</option> <option value="第4節">第4節</option> <option value="第5節">第5節</option> <option value="第6節">第6節</option> <option value="第7節">第7節</option> <option value="第8節">第8節</option> </select>
+       <div class="form-group"><label class="setting-label" for="schedule-period">第幾節</label> <select id="schedule-period" class="setting-select"> <option value="第1節">第1節</option> <option value="第2節">第2節</option> <option value="第3節">第3節</option> <option value="第4節">第4節</option> <option value="第5節">第5節</option> <option value="第6節">第6節</option> <option value="第7節">第7���</option> <option value="第8節">第8節</option> </select>
        </div>
        <div class="form-group"><label class="setting-label" for="schedule-time">時間</label> <input type="time" id="schedule-time" class="setting-input" required>
        </div>
@@ -847,6 +894,13 @@
     let timerTotalSeconds = 0;
     let timerRemainingSeconds = 0;
     let timerRunning = false;
+    let decibelMonitoring = false;
+    let audioContext = null;
+    let analyser = null;
+    let microphone = null;
+    let decibelInterval = null;
+    let lastAlertTime = 0;
+    let currentAudioElement = null;
 
     const dataHandler = {
       onDataChanged(data) {
@@ -1023,8 +1077,15 @@
     }
 
     function playAudio(audioBlob) {
-      const audio = new Audio(URL.createObjectURL(audioBlob));
-      audio.play();
+      if (currentAudioElement) {
+        currentAudioElement.pause();
+        currentAudioElement.currentTime = 0;
+      }
+      currentAudioElement = new Audio(URL.createObjectURL(audioBlob));
+      currentAudioElement.play();
+      currentAudioElement.onended = () => {
+        currentAudioElement = null;
+      };
     }
 
     function playSelectedPhrase() {
@@ -1051,7 +1112,7 @@
 
     function startPlaying() {
       if (selectedPhrase === null) {
-        updateStatus('請先選擇要播放的提醒語句');
+        updateStatus('請��選擇要播放的提醒語句');
         return;
       }
 
@@ -1079,7 +1140,7 @@
       if (durationSeconds > 0) {
         playDurationTimeout = setTimeout(() => {
           stopPlaying();
-          updateStatus('播放時間已到！');
+          updateStatus('播放時間已����');
         }, durationSeconds * 1000);
       }
 
@@ -1117,6 +1178,12 @@
       
       if ('speechSynthesis' in window) {
         speechSynthesis.cancel();
+      }
+      
+      if (currentAudioElement) {
+        currentAudioElement.pause();
+        currentAudioElement.currentTime = 0;
+        currentAudioElement = null;
       }
       
       if (!isRecording) {
@@ -1316,7 +1383,7 @@
 
     function checkSchedules() {
       const now = new Date();
-      const currentDay = ['星期日', '星期一', '星期二', '星期三', '星期四', '星���五', '星期六'][now.getDay()];
+      const currentDay = ['星期日', '星期一', '星期二', '星�������', '星期四', '星���五', '星期六'][now.getDay()];
       const currentTime = now.toTimeString().slice(0, 5);
       const currentMinute = now.getHours() * 60 + now.getMinutes();
 
@@ -1416,6 +1483,115 @@
       timerRemainingSeconds = timerTotalSeconds;
       updateTimerDisplay();
       stopTimer();
+    }
+
+    async function startDecibelMonitoring() {
+      if (decibelMonitoring) return;
+
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        analyser = audioContext.createAnalyser();
+        microphone = audioContext.createMediaStreamSource(stream);
+        
+        analyser.fftSize = 512;
+        microphone.connect(analyser);
+        
+        decibelMonitoring = true;
+        document.getElementById('decibel-start-btn').disabled = true;
+        document.getElementById('decibel-stop-btn').disabled = false;
+        
+        const dataArray = new Uint8Array(analyser.frequencyBinCount);
+        
+        decibelInterval = setInterval(() => {
+          analyser.getByteFrequencyData(dataArray);
+          
+          let sum = 0;
+          for (let i = 0; i < dataArray.length; i++) {
+            sum += dataArray[i];
+          }
+          const average = sum / dataArray.length;
+          
+          const decibel = Math.round(20 * Math.log10(average + 1));
+          
+          const display = document.getElementById('decibel-display');
+          display.textContent = `${decibel} dB`;
+          
+          if (decibel < 50) {
+            display.style.color = '#10b981';
+          } else if (decibel < 70) {
+            display.style.color = '#fbbf24';
+          } else if (decibel < 85) {
+            display.style.color = '#f97316';
+          } else {
+            display.style.color = '#ef4444';
+          }
+          
+          const alertEnabled = document.getElementById('decibel-alert-enabled').checked;
+          const threshold = parseInt(document.getElementById('decibel-threshold').value);
+          const cooldown = parseInt(document.getElementById('decibel-cooldown').value) * 1000;
+          const now = Date.now();
+          
+          if (alertEnabled && decibel >= threshold && (now - lastAlertTime) >= cooldown) {
+            lastAlertTime = now;
+            const phraseIndex = parseInt(document.getElementById('decibel-alert-phrase').value);
+            playPhraseByIndex(phraseIndex);
+            
+            const config = window.elementSdk ? window.elementSdk.config : defaultConfig;
+            const phraseKey = `phrase_${phraseIndex + 1}`;
+            const phraseText = config[phraseKey] || defaultConfig[phraseKey];
+            
+            const statusEl = document.getElementById('decibel-status');
+            const lastAlertEl = document.getElementById('decibel-last-alert');
+            statusEl.style.display = 'block';
+            lastAlertEl.textContent = `${decibel} dB - ${phraseText} (${new Date().toLocaleTimeString()})`;
+            
+            const toast = document.createElement('div');
+            toast.textContent = `🔊 音量過高 (${decibel} dB)：${phraseText}`;
+            toast.style.cssText = 'position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #ef4444; color: white; padding: 16px 24px; border-radius: 8px; z-index: 1000; font-weight: 600;';
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 5000);
+          }
+        }, 100);
+        
+      } catch (error) {
+        const toast = document.createElement('div');
+        toast.textContent = '無法使用麥克風，請檢查權限設定';
+        toast.style.cssText = 'position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #ef4444; color: white; padding: 16px 24px; border-radius: 8px; z-index: 1000;';
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+      }
+    }
+
+    function stopDecibelMonitoring() {
+      if (!decibelMonitoring) return;
+
+      decibelMonitoring = false;
+      
+      if (decibelInterval) {
+        clearInterval(decibelInterval);
+        decibelInterval = null;
+      }
+      
+      if (microphone) {
+        microphone.disconnect();
+        microphone = null;
+      }
+      
+      if (analyser) {
+        analyser = null;
+      }
+      
+      if (audioContext) {
+        audioContext.close();
+        audioContext = null;
+      }
+      
+      document.getElementById('decibel-display').textContent = '-- dB';
+      document.getElementById('decibel-display').style.color = 'white';
+      document.getElementById('decibel-start-btn').disabled = false;
+      document.getElementById('decibel-stop-btn').disabled = true;
     }
 
     function timerFinished() {
@@ -1548,6 +1724,14 @@
       resetTimer();
     });
 
+    document.getElementById('decibel-start-btn').addEventListener('click', () => {
+      startDecibelMonitoring();
+    });
+
+    document.getElementById('decibel-stop-btn').addEventListener('click', () => {
+      stopDecibelMonitoring();
+    });
+
     async function init() {
       if (window.dataSdk) {
         const result = await window.dataSdk.init(dataHandler);
@@ -1573,10 +1757,11 @@
       updateCurrentTime();
       setTimer(5, 0);
       document.getElementById('timer-pause-btn').disabled = true;
+      document.getElementById('decibel-stop-btn').disabled = true;
       onConfigChange(defaultConfig);
     }
 
     init();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a58437e629b7aab',t:'MTc2NDMxNjExNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9acad74ad3cc4a68',t:'MTc2NTUxNzU0NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
