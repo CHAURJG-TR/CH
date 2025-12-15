@@ -675,7 +675,7 @@
   <div class="app-wrapper">
    <div class="player-container">
     <h1 class="title" id="player-title">課���提醒播放器</h1>
-    <p class="subtitle">可手動播放或設定課表自動播放</p>
+    <p class="subtitle">可手動播放或設定���表自動播放</p>
     <div class="tabs"><button class="tab-btn active" data-tab="manual">手動播放</button> <button class="tab-btn" data-tab="schedule">課表設定</button> <button class="tab-btn" data-tab="timer">計時系統</button> <button class="tab-btn" data-tab="decibel">分貝計</button>
     </div><!-- Manual Tab -->
     <div class="tab-content active" id="manual-tab">
@@ -686,7 +686,7 @@
       <div class="settings-row">
        <div class="setting-item"><label class="setting-label" for="interval-input">間隔秒數</label> <input type="number" id="interval-input" class="setting-input" min="1" max="60" value="3">
        </div>
-       <div class="setting-item"><label class="setting-label" for="repeat-input">重複次數（0=無限）</label> <input type="number" id="repeat-input" class="setting-input" min="0" max="999" value="0">
+       <div class="setting-item"><label class="setting-label" for="repeat-input">重複����數（0=無���）</label> <input type="number" id="repeat-input" class="setting-input" min="0" max="999" value="0">
        </div>
       </div>
       <div class="settings-row">
@@ -698,7 +698,7 @@
      </div>
      <div class="phrase-list" id="phrase-list">
       <div class="phrase-item" data-phrase="0"><span class="phrase-icon">📢</span>
-       <div class="phrase-content"><span class="phrase-text" id="phrase-text-0">靜下來</span> <span class="phrase-mode" id="phrase-mode-0">文字轉語音</span>
+       <div class="phrase-content"><span class="phrase-text" id="phrase-text-0">靜��來</span> <span class="phrase-mode" id="phrase-mode-0">文字轉語音</span>
        </div>
        <div class="phrase-actions"><button class="record-btn" data-phrase="0"> <span>🎤</span> <span>錄音</span> </button>
        </div>
@@ -718,26 +718,26 @@
       <div class="phrase-item" data-phrase="3"><span class="phrase-icon">🤫</span>
        <div class="phrase-content"><span class="phrase-text" id="phrase-text-3">不要吵</span> <span class="phrase-mode" id="phrase-mode-3">文字轉語音</span>
        </div>
-       <div class="phrase-actions"><button class="record-btn" data-phrase="3"> <span>🎤</span> <span>錄音</span> </button>
+       <div class="phrase-actions"><button class="record-btn" data-phrase="3"> <span>🎤</span> <span>錄���</span> </button>
        </div>
       </div>
       <div class="phrase-item" data-phrase="4"><span class="phrase-icon">🚶</span>
        <div class="phrase-content"><span class="phrase-text" id="phrase-text-4">出去排隊</span> <span class="phrase-mode" id="phrase-mode-4">文字轉語音</span>
        </div>
-       <div class="phrase-actions"><button class="record-btn" data-phrase="4"> <span>🎤</span> <span>錄音</span></button>
+       <div class="phrase-actions"><button class="record-btn" data-phrase="4"> <span>🎤</span> <span>錄音</span> </button>
        </div>
       </div>
       <div class="phrase-item" data-phrase="5"><span class="phrase-icon">🍱</span>
        <div class="phrase-content"><span class="phrase-text" id="phrase-text-5">抬餐</span> <span class="phrase-mode" id="phrase-mode-5">文字轉語音</span>
        </div>
-       <div class="phrase-actions"><button class="record-btn" data-phrase="5"> <span>🎤</span> <span>錄音</span> </button>
+       <div class="phrase-actions"><button class="record-btn" data-phrase="5"> <span>🎤</span> <span>錄�����</span> </button>
        </div>
       </div>
      </div>
-     <div class="control-panel"><button class="control-btn" id="play-btn" aria-label="播放">▶️</button> <button class="control-btn stop" id="stop-btn" aria-label="停止">........</button>
+     <div class="control-panel"><button class="control-btn" id="play-btn" aria-label="播放">▶️</button> <button class="control-btn stop" id="stop-btn" aria-label="停止">���️</button>
      </div>
      <div class="status" id="status">
-      請選一個提醒語句後按播放
+      請選���一個提醒語句後按播放
      </div>
      <div class="progress-info" id="progress-info" style="display: none;"><span id="play-count">0</span> <span>/</span> <span id="total-count">∞</span>
      </div>
@@ -759,12 +759,12 @@
      </div>
      <div class="timer-custom-section">
       <div class="settings-title">
-       ⚙自訂時間
+       ⚙��� 自訂時間
       </div>
       <div class="custom-time-inputs">
        <div class="time-input-group"><label class="setting-label" for="timer-minutes">分鐘</label> <input type="number" id="timer-minutes" class="setting-input" min="0" max="99" value="5">
        </div>
-       <div class="time-input-group"><label class="setting-label" for="timer-seconds">秒數</label> <input type="number" id="timer-seconds" class="setting-input" min="0" max="59" value="0">
+       <div class="time-input-group"><label class="setting-label" for="timer-seconds">��數</label> <input type="number" id="timer-seconds" class="setting-input" min="0" max="59" value="0">
        </div>
       </div><button class="set-timer-btn" id="set-timer-btn">設定計時器</button>
      </div>
@@ -855,7 +855,7 @@
      <div class="schedule-list" id="schedule-list">
       <div class="empty-state">
        尚未新增任何排程<br>
-        請上方表單新增課表排程
+        請��上方表單新增課表排程
       </div>
      </div>
     </div>
@@ -1140,7 +1140,7 @@
       if (durationSeconds > 0) {
         playDurationTimeout = setTimeout(() => {
           stopPlaying();
-          updateStatus('播放時間已到');
+          updateStatus('播放時間已����');
         }, durationSeconds * 1000);
       }
 
@@ -1187,7 +1187,7 @@
       }
       
       if (!isRecording) {
-        updateStatus('播放停止');
+        updateStatus('播放��停止');
       }
       document.getElementById('progress-info').style.display = 'none';
     }
@@ -1235,14 +1235,14 @@
 
         mediaRecorder.start();
         isRecording = true;
-        updateStatus('錄音中... 再按一次停止');
+        updateStatus('錄音中... ��再按一次停止');
 
         const recordBtn = document.querySelector(`.record-btn[data-phrase="${phraseIndex}"]`);
         recordBtn.classList.add('recording');
         recordBtn.innerHTML = '<span>⏹️</span><span>停止</span>';
 
       } catch (error) {
-        updateStatus('無法使用麥克風，請查看權限設定');
+        updateStatus('無法使用麥克風，������查權限設定');
       }
     }
 
@@ -1290,7 +1290,7 @@
               <button class="toggle-btn ${schedule.enabled ? '' : 'disabled'}" data-id="${schedule.__backendId}">
                 ${schedule.enabled ? '啟用' : '停用'}
               </button>
-              <button class="delete-btn" data-id="${schedule.__backendId}">刪除</button>
+              <button class="delete-btn" data-id="${schedule.__backendId}">刪��</button>
             </div>
           </div>
         `;
@@ -1366,13 +1366,13 @@
       
       if (deleteBtn.textContent === '確認刪除？') {
         deleteBtn.disabled = true;
-        deleteBtn.textContent = '刪除中...';
+        deleteBtn.textContent = '刪除���...';
         
         await window.dataSdk.delete(schedule);
         
         deleteBtn.disabled = false;
       } else {
-        deleteBtn.textContent = '確認刪除？';
+        deleteBtn.textContent = '��認刪除？';
         setTimeout(() => {
           if (deleteBtn) {
             deleteBtn.textContent = '刪除';
@@ -1383,7 +1383,7 @@
 
     function checkSchedules() {
       const now = new Date();
-      const currentDay = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'][now.getDay()];
+      const currentDay = ['星期日', '星期一', '星期���', '星�������', '星期四', '星���五', '星期六'][now.getDay()];
       const currentTime = now.toTimeString().slice(0, 5);
       const currentMinute = now.getHours() * 60 + now.getMinutes();
 
@@ -1507,13 +1507,16 @@
         decibelInterval = setInterval(() => {
           analyser.getByteFrequencyData(dataArray);
           
-          let sum = 0;
+          // 計算 RMS (均方根) 獲得更精準的音量
+          let sumSquares = 0;
           for (let i = 0; i < dataArray.length; i++) {
-            sum += dataArray[i];
+            const normalized = dataArray[i] / 255.0;
+            sumSquares += normalized * normalized;
           }
-          const average = sum / dataArray.length;
+          const rms = Math.sqrt(sumSquares / dataArray.length);
           
-          const decibel = Math.round(20 * Math.log10(average + 1));
+          // 使用更精準的分貝計算公式，校準到實際環境音量
+          const decibel = Math.round(20 * Math.log10(rms * 100 + 1) + 30);
           
           const display = document.getElementById('decibel-display');
           display.textContent = `${decibel} dB`;
@@ -1763,5 +1766,5 @@
 
     init();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9acadaf1f14e6b74',t:'MTc2NTUxNzY5NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ae2c8a630f2841c',t:'MTc2NTc2ODYwMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
